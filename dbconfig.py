@@ -2,8 +2,8 @@ import pymongo
 
 DB_NAME = "pytask"
 # DB_USERNAME = "admin"
-DB_USERNAME = "chirayu"
-DB_PASS = "chirayu911"
+DB_USERNAME = ""
+DB_PASS = ""
 
 # DB_PASS = "YaLtxqzWBseXTqQc"
 # DB_PASS = "nnvwiZP1jNmkn2qK"
@@ -13,7 +13,7 @@ DB_PASS = "chirayu911"
 
 # client = pymongo.MongoClient("mongodb+srv://chirayu_su:chirayu2099@docs.hxuvi.mongodb.net/?retryWrites=true&w=majority")
 
-client = pymongo.MongoClient("mongodb+srv://chirayu_su:chirayu2099@cluster0.gt4cp.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient(f"mongodb+srv://{DB_USERNAME}:{DB_PASS}@cluster0.gt4cp.mongodb.net/?retryWrites=true&w=majority")
 # db = client.test
 
 db = client.pytask
