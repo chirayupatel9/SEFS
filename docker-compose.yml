@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: sefs-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: pytask
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - sefs-network
+
+  app:
+    build: .
+    container_name: sefs-app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_HOST=mongodb
+      - MONGODB_PORT=27017
+      - FLASK_ENV=development
+    depends_on:
+      - mongodb
+    networks:
+      - sefs-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  sefs-network:
+    driver: bridge

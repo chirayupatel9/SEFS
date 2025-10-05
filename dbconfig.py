@@ -1,25 +1,21 @@
 import pymongo
+import os
 
 DB_NAME = "pytask"
-# DB_USERNAME = "admin"
-DB_USERNAME = ""
-DB_PASS = ""
+# Use local MongoDB instance
+MONGODB_HOST = os.getenv('MONGODB_HOST', 'localhost')
+MONGODB_PORT = int(os.getenv('MONGODB_PORT', 27017))
 
-# DB_PASS = "YaLtxqzWBseXTqQc"
-# DB_PASS = "nnvwiZP1jNmkn2qK"
-# URI = "mongodb+srv://chirayu:chirayu911@docs.hxuvi.mongodb.net/?retryWrites=true&w=majority"
-# URI = "mongodb+srv://"+DB_USERNAME+":"+DB_PASS+"@cluster0.gnwyvcr.mongodb.net/?retryWrites=true&w=majority"
-# CLIENT = pymongo.MongoClient(URI, connect=False)
-
-# client = pymongo.MongoClient("mongodb+srv://chirayu_su:chirayu2099@docs.hxuvi.mongodb.net/?retryWrites=true&w=majority")
-
-client = pymongo.MongoClient(f"mongodb+srv://{DB_USERNAME}:{DB_PASS}@cluster0.gt4cp.mongodb.net/?retryWrites=true&w=majority")
-# db = client.test
+# Connect to local MongoDB instance
+client = pymongo.MongoClient(f"mongodb://{MONGODB_HOST}:{MONGODB_PORT}/")
 
 db = client.pytask
 users = db.users
 tasks = db.tasks
 
-dbs = client.test
-# print(dbs.find({}))
-# print(db.list_collection_names())
+# Test connection
+try:
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB!")
+except Exception as e:
+    print(f"Failed to connect to MongoDB: {e}")
