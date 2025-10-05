@@ -42,28 +42,26 @@ UPDATE_TASK_SCHEMA = {
 
 def add_task(task):
     query = {"title": task['title']}
-    if tasks.count_documents(query) == 1:
+    if tasks.count_documents(query) >= 1:
         return None
+    
+    # Set initial status and timestamp
+    task["current_status"] = task.get("current_status", "Pending")
+    task["PENDING"] = datetime.now()
+    
     x = tasks.insert_one(task)
-    x = tasks.update_one(query, {
-        "$set": {"current_status": task["current_status"], "PENDING": datetime.now()}})
     return task
 
 
 # print(add_task(TASKS_SCHEMA))
 
 def show_task():
-    task = tasks.find({})
-    list_task = list(task)
-    json_data = dumps(list_task)
-    # print(task)
-    new_dict = []
-    for x in tasks.find({}):
-        new_dict.append(x)
-        # print(x)
-
-    # print(new_dict)
-    new_dict = json.loads(bson.json_util.dumps(new_dict))
+    task_list = []
+    for task in tasks.find({}):
+        task_list.append(task)
+    
+    # Convert ObjectId to string for JSON serialization
+    new_dict = json.loads(bson.json_util.dumps(task_list))
     return new_dict
 
 
@@ -72,18 +70,30 @@ def show_task():
 
 def update_task_status(task):
     query = {"title": task["title"]}
-    if tasks.count_documents(query) == 1:
-        x = tasks.update_one(query, {
-            "$set": {"current_status": task["current_status"], task["current_status"]: datetime.now()}})
-    return task
+    if tasks.count_documents(query) >= 1:
+        update_data = {
+            "current_status": task["current_status"],
+            task["current_status"]: datetime.now()
+        }
+        x = tasks.update_one(query, {"$set": update_data})
+        return task
+    return None
 
 
 def update_task(task):
     query = {"title": task["title"]}
-    if tasks.count_documents(query) == 1:
-        x = tasks.update_one(query, {
-            "$set": {"ETA": task["ETA"], "Assignee": task["Assignee"]}})
-    return task
+    if tasks.count_documents(query) >= 1:
+        update_data = {}
+        if "ETA" in task:
+            update_data["ETA"] = task["ETA"]
+        if "Assignee" in task:
+            update_data["Assignee"] = task["Assignee"]
+        if "description" in task:
+            update_data["description"] = task["description"]
+        
+        x = tasks.update_one(query, {"$set": update_data})
+        return task
+    return None
 
 
 # print(update_task(UPDATE_TASK_SCHEMA))

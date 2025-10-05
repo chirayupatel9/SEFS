@@ -1,51 +1,80 @@
 
-# SEFS
+# SEFS - Task Management System
 
-**SEFS** (Secure and Efficient File Storage) is a Python-based application designed to provide users with a streamlined file management system. It incorporates a Docker setup and supports deployment via Vercel.
+**SEFS** (Secure and Efficient File Storage) is a full-stack task management application with a Trello-like dashboard. It features a React frontend with a modern UI and a Flask backend with MongoDB integration.
 
 ## Features
 
-- Secure file storage management.
-- Dockerized environment for consistent deployment.
-- Configurable database connection with dbconfig and dbconnect modules.
-- Web interface powered by Python (Flask or similar).
+- **Trello-like Dashboard**: Modern React UI with drag-and-drop functionality
+- **Task Management**: Create, update, and track tasks across different statuses
+- **Real-time Updates**: Live task status updates and management
+- **MongoDB Integration**: Persistent data storage with MongoDB
+- **Docker Support**: Complete containerization with docker-compose
+- **Responsive Design**: Mobile-friendly interface
 
 ## Project Structure
 
-- **app.py**: The main application file.
-- **dbconfig.py**: Contains the database configuration.
-- **dbconnect.py**: Handles the database connection.
-- **functions.py**: Contains utility functions for the application.
-- **Dockerfile**: Docker configuration for containerization.
-- **start.sh**: Script to start the application.
-- **vercel.json**: Configuration for deployment on Vercel.
+- **Backend**:
+  - `app.py`: Flask API server with task management endpoints
+  - `dbconfig.py`: MongoDB connection configuration
+  - `functions.py`: Database operations and business logic
+  - `requirements.txt`: Python dependencies
 
-## Installation
+- **Frontend**:
+  - `frontend/`: React application with Trello-like UI
+  - `frontend/src/components/`: React components (Board, TaskCard, etc.)
+  - `frontend/src/services/`: API service layer
+
+- **Docker**:
+  - `Dockerfile`: Backend container configuration
+  - `frontend/Dockerfile`: Frontend container configuration
+  - `docker-compose.yml`: Multi-service orchestration
+
+## Quick Start
+
+### Using Docker Compose (Recommended)
 
 1. Clone the repository:
    ```bash
    git clone https://github.com/chirayupatel9/SEFS.git
-   ```
-2. Navigate to the project directory:
-   ```bash
    cd SEFS
    ```
-3. Install the required dependencies:
+
+2. Start all services:
+   ```bash
+   docker-compose up --build
+   ```
+
+3. Access the application:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:5000
+   - MongoDB: localhost:27017
+
+### Manual Setup
+
+1. **Backend Setup**:
    ```bash
    pip install -r requirements.txt
+   python app.py
    ```
-4. Start the application:
+
+2. **Frontend Setup**:
    ```bash
-   bash start.sh
+   cd frontend
+   npm install --legacy-peer-deps
+   npm start
    ```
 
-## Usage
+## API Endpoints
 
-Access the application at `http://localhost:5000` once it is running.
+- `GET /show` - Get all tasks
+- `POST /add_task` - Create a new task
+- `PATCH /update_task` - Update task details
+- `PATCH /update_task_status` - Update task status
 
-## Deployment
+## Task Status Flow
 
-This application can be deployed using Docker or Vercel. Use the included Dockerfile for building a Docker image, or deploy directly on Vercel using the configuration provided in `vercel.json`.
+- **Pending** → **In Progress** → **In Review** → **Completed**
 
 ## License
 

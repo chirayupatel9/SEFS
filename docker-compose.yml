@@ -14,9 +14,9 @@ services:
     networks:
       - sefs-network
 
-  app:
+  backend:
     build: .
-    container_name: sefs-app
+    container_name: sefs-backend
     restart: always
     ports:
       - "5000:5000"
@@ -26,6 +26,19 @@ services:
       - FLASK_ENV=development
     depends_on:
       - mongodb
+    networks:
+      - sefs-network
+
+  frontend:
+    build: ./frontend
+    container_name: sefs-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - backend
     networks:
       - sefs-network
 
